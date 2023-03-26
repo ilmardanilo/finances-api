@@ -16,7 +16,7 @@ export class UsersService {
     private readonly hashService: HashService,
   ) {}
 
-  async create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto): Promise<UserEntity> {
     const { email, senha } = createUserDto;
 
     const user = await this.usersRepository.findOne({ email });
@@ -35,7 +35,7 @@ export class UsersService {
     });
   }
 
-  async findAll() {
+  async findAll(): Promise<UserEntity[]> {
     return this.usersRepository.findAll();
   }
 
@@ -49,7 +49,7 @@ export class UsersService {
     return user;
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
+  async update(id: number, updateUserDto: UpdateUserDto): Promise<void> {
     const user = await this.usersRepository.findOne({ id });
 
     if (!user) {
@@ -59,7 +59,7 @@ export class UsersService {
     await this.usersRepository.update(id, updateUserDto);
   }
 
-  async remove(id: number) {
+  async remove(id: number): Promise<void> {
     const user = await this.usersRepository.findOne({ id });
 
     if (!user) {
