@@ -31,11 +31,11 @@ export class UsersService {
   }
 
   async findAll() {
-    return `This action returns all users`;
+    return this.usersRepository.findAll();
   }
 
   async findOne(id: number) {
-    return `This action returns a #${id} user`;
+    return this.usersRepository.findOne({ id });
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
