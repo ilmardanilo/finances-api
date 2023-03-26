@@ -7,6 +7,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersRepository } from './users.repository';
 import { HashService } from '../security/hash/hash.service';
+import { UserEntity } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
@@ -38,8 +39,14 @@ export class UsersService {
     return this.usersRepository.findAll();
   }
 
-  async findOne(id: number) {
-    return this.usersRepository.findOne({ id });
+  async findOne(id: number): Promise<UserEntity> {
+    const user = await this.usersRepository.findOne({ id });
+
+    if (!user) {
+      throw new NotFoundException('Usuário não encontrado');
+    }
+
+    return user;
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
