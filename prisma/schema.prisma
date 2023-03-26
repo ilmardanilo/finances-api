@@ -9,3 +9,65 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Usuario {
+  id        Int       @id @default(autoincrement())
+  nome      String
+  email     String    @unique
+  senha     String
+  admin     Boolean   @default(false)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now())
+  rendas    Renda[]
+  despesas  Despesa[]
+
+  @@map("usuario")
+}
+
+model Categoria {
+  id        Int           @id @default(autoincrement())
+  nome      String        @unique
+  icone     String
+  tipo      TipoCategoria
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @default(now())
+  rendas    Renda[]
+  despesas  Despesa[]
+
+  @@map("categoria")
+}
+
+model Renda {
+  id          Int       @id @default(autoincrement())
+  valor       Float
+  data        DateTime  @db.Date
+  descricao   String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now())
+  usuarioId   Int
+  categoriaId Int
+  usuario     Usuario   @relation(fields: [usuarioId], references: [id])
+  categoria   Categoria @relation(fields: [categoriaId], references: [id])
+
+  @@map("renda")
+}
+
+model Despesa {
+  id          Int       @id @default(autoincrement())
+  valor       Float
+  data        DateTime  @db.Date
+  descricao   String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now())
+  usuarioId   Int
+  categoriaId Int
+  usuario     Usuario   @relation(fields: [usuarioId], references: [id])
+  categoria   Categoria @relation(fields: [categoriaId], references: [id])
+
+  @@map("despesa")
+}
+
+enum TipoCategoria {
+  RENDA
+  DESPESA
+}
