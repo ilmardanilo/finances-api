@@ -1,4 +1,8 @@
-import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersRepository } from './users.repository';
@@ -18,7 +22,7 @@ export class UsersService {
 
     if (user) {
       throw new UnprocessableEntityException(
-        'Já existe um usuário com esse email.',
+        'Já existe um usuário com esse email',
       );
     }
 
@@ -39,10 +43,22 @@ export class UsersService {
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+    const user = await this.usersRepository.findOne({ id });
+
+    if (!user) {
+      throw new NotFoundException('Usuário não encontrado');
+    }
+
+    await this.usersRepository.update(id, updateUserDto);
   }
 
   async remove(id: number) {
-    return `This action removes a #${id} user`;
+    const user = await this.usersRepository.findOne({ id });
+
+    if (!user) {
+      throw new NotFoundException('Usuário não encontrado');
+    }
+
+    await this.usersRepository.remove(id);
   }
 }
