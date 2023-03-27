@@ -40,7 +40,7 @@ export class CategoriesRepository {
   ): Promise<void> {
     await this.prismaService.categoria.update({
       where: { id },
-      data: updateCategoryDto,
+      data: { ...updateCategoryDto, updatedAt: new Date() },
     });
   }
 

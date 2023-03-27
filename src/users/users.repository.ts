@@ -27,7 +27,7 @@ export class UsersRepository {
   async update(id: number, updateUserDto: UpdateUserDto): Promise<void> {
     await this.prismaService.usuario.update({
       where: { id },
-      data: updateUserDto,
+      data: { ...updateUserDto, updatedAt: new Date() },
     });
   }
 
