@@ -7,6 +7,7 @@ import { CategoriesRepository } from './categories.repository';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { CategoryEntity } from './entities/category.entity';
+import { TipoCategoria } from '@prisma/client';
 
 @Injectable()
 export class CategoriesService {
@@ -26,7 +27,15 @@ export class CategoriesService {
     return this.categoriesRepository.create(createCategoryDto);
   }
 
-  async findAll(): Promise<CategoryEntity[]> {
+  async findAll(typeCategory?: TipoCategoria): Promise<CategoryEntity[]> {
+    if (
+      typeCategory &&
+      (typeCategory === TipoCategoria.RENDA ||
+        typeCategory === TipoCategoria.DESPESA)
+    ) {
+      return this.categoriesRepository.findAllByType(typeCategory);
+    }
+
     return this.categoriesRepository.findAll();
   }
 

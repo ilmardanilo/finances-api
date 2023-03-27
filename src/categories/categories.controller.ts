@@ -7,7 +7,9 @@ import {
   Delete,
   Put,
   HttpCode,
+  Query,
 } from '@nestjs/common';
+import { TipoCategoria } from '@prisma/client';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
@@ -22,8 +24,8 @@ export class CategoriesController {
   }
 
   @Get()
-  findAll() {
-    return this.categoriesService.findAll();
+  findAll(@Query('type') typeCategory: TipoCategoria) {
+    return this.categoriesService.findAll(typeCategory);
   }
 
   @Get(':id')
